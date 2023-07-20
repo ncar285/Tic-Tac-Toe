@@ -1,0 +1,58 @@
+/* Your code here */
+html, body, figure, figcaption, ul, li, h1 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    text-align: inherit;
+  }
+
+h1 {
+    font-size: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: teal;
+    font-weight: 800;
+    padding: 20px;
+}
+
+ul {
+    display:flex;
+    width: 603px;
+    flex-wrap: wrap;
+    list-style: none;
+    border: 1px solid black;
+}
+
+ul > li {
+    border: 1px solid black;
+    height: 199px;
+    width: 199px;
+    background-color: lavender;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+li:hover {
+    background-color: rgb(130, 130, 150);
+}
+
+.clickedX {
+    font-size: 150px;
+    font-family: sans-serif;
+    color: red;
+}
+
+.clickedO {
+    color: green;
+    font-size: 150px;
+    font-family: sans-serif
+}
