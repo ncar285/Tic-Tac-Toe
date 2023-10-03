@@ -1,10 +1,14 @@
-// Add your import statements for View and Game here
-
 import View from "./ttt-view"
 import Game from "../ttt_node/game"
+import { v4 as uuidv4 } from 'uuid';
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Your code here
+
+  document.getElementById('code-generate').addEventListener('click', (e)=> {
+    // debugger
+    const codeInput = document.getElementById('game-code')
+    codeInput.value = uuidv4()
+  })
 
   const game = new Game();
   const ele = document.querySelector(".ttt")
@@ -36,4 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
   })
+
+
+
 });

@@ -1,0 +1,66 @@
+html, body, figure, figcaption, ul, li, h1 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    text-align: inherit;
+}
+
+body * {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-size: 3rem;
+    color: teal;
+    font-weight: 800;
+    padding: 4rem 0 2rem 0;
+}
+
+.game-code-enter {
+    position: absolute;
+    width: 10rem;
+    top: 4rem;
+    right: calc(50% - 301.5px - 1rem);
+    transform: translateX(100%);
+}
+
+#game-code {
+    all: unset;
+}
+
+#game-code, #game-code:focus {
+    padding: 0.5rem 1rem;
+    color: #1f1b1b;
+    font-size: 1rem;
+    border-radius: 0.4em;
+    border: 1px solid #cccc;
+    width: 100%;
+}
+
+#game-code:focus {
+    border: #1f1b1b 1px solid;
+}
+
+#code-generate {
+    all: unset;
+    margin-top: 1rem;
+    color: #1f1b1b;
+    background-color: rgba(0, 128,128, 0.5);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.4em;
+    width: 100%;
+}
+
+#code-generate:hover {
+    cursor: pointer;
+}
+
+#code-generate:active {
+    background-color: rgba(0, 128,128);
+    transform: scale(1.05);
+}
+
+
+
