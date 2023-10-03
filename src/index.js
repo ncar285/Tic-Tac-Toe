@@ -5,9 +5,8 @@ import { v4 as uuidv4 } from 'uuid';
 document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById('code-generate').addEventListener('click', (e)=> {
-    // debugger
     const codeInput = document.getElementById('game-code')
-    codeInput.value = uuidv4()
+    codeInput.value = uuidv4().substr(0, 8);
   })
 
   const game = new Game();
