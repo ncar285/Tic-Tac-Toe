@@ -4,9 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  document.getElementById('code-generate').addEventListener('click', (e)=> {
+  document.getElementById('code-generate').addEventListener('click', ()=> {
     const codeInput = document.getElementById('game-code')
     codeInput.value = uuidv4().substr(0, 8);
+  })
+
+  document.getElementById('copy-text').addEventListener('click',() => {
+    
   })
 
   const game = new Game();

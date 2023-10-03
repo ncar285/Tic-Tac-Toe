@@ -19,7 +19,7 @@ h1 {
 
 .game-code-enter {
     position: absolute;
-    width: 10rem;
+    width: 12rem;
     top: 4rem;
     right: calc(50% - 301.5px - 1rem);
     transform: translateX(100%);
@@ -29,18 +29,35 @@ h1 {
     all: unset;
 }
 
+#game-code-container {
+    border-radius: 0.4em;
+    /* border: 1px solid orange; */
+    /* width: 100%; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
 #game-code, #game-code:focus {
     padding: 0.5rem 1rem;
     color: #1f1b1b;
     font-size: 1rem;
     border-radius: 0.4em;
     border: 1px solid #cccc;
-    width: 100%;
+    width: 8rem;
+    /* width: 100%; */
+}
+
+#copy-text { 
+    height: 1rem;
 }
 
 #game-code:focus {
     border: #1f1b1b 1px solid;
 }
+
+
 
 #code-generate {
     all: unset;
@@ -50,7 +67,7 @@ h1 {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     border-radius: 0.4em;
-    width: 100%;
+    width: 10rem;
 }
 
 #code-generate:hover {
