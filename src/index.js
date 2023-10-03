@@ -10,7 +10,12 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   document.getElementById('copy-text').addEventListener('click',() => {
-    
+    document.getElementById('copy-text').src = "assets/tick.svg"
+    document.getElementById('copy-message').style.display = "block"
+    setTimeout(()=>{
+      document.getElementById('copy-text').src = "assets/copy-text.svg"
+      document.getElementById('copy-message').style.display = "none"
+    }, 1000)
   })
 
   const game = new Game();

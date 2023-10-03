@@ -30,6 +30,7 @@ h1 {
 }
 
 #game-code-container {
+    position: relative;
     border-radius: 0.4em;
     /* border: 1px solid orange; */
     /* width: 100%; */
@@ -79,5 +80,22 @@ h1 {
     transform: scale(1.05);
 }
 
+
+/* text copied message */
+
+#copy-text:hover {
+    cursor: pointer;
+}
+
+#copy-message {
+    display: none;
+    position: absolute;
+    background-color: #1f1b1b;
+    color: white;
+    padding: 0.5rem;
+    right: 0;
+    transform: translateX(calc(100% + 0.5rem));
+    border-radius: 0.4em;
+}
 
 
