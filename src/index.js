@@ -1,8 +1,20 @@
-import View from "./ttt-view"
-import Game from "../ttt_node/game"
-import { v4 as uuidv4 } from 'uuid';
+import View from "./ttt-view";
+import Game from "../ttt_node/game";
+import { MetaGame } from "./metaGame";
 
 document.addEventListener("DOMContentLoaded", () => {
+  const metaGame = new MetaGame();
+
+  const gameCode = JSON.parse(sessionStorage.getItem("gameCode"));
+  if (gameCode) {
+    sessionStorage.setItem("gameCode", JSON.stringify(gameCode));
+    document.getElementById('game-code').value = gameCode;
+    metaGame.saveGameToFirestore(gameCode);
+  } else {
+    sessionStorage.setItem("gameCode", JSON.stringify(''));
+    sessionStorage.setItem("gameActive", JSON.stringify(false));
+  }
+
 
   const copyText = () => {
     const copyIcon = document.getElementById('copy-text');
@@ -31,10 +43,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  document.getElementById('code-generate').addEventListener('click', ()=> {
-    const codeInput = document.getElementById('game-code')
-    codeInput.value = uuidv4().substr(0, 8).toUpperCase();;
-  })
+
+  document.getElementById('code-generate').addEventListener('click', generateCode)
+
 
   document.getElementById('copy-text').addEventListener('click', copyText);
 
