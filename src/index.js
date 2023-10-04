@@ -43,9 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-
-  document.getElementById('code-generate').addEventListener('click', generateCode)
-
+  document.getElementById('code-generate').addEventListener('click', ()=> {
+    const codeInput = document.getElementById('game-code')
+    codeInput.value = uuidv4().substr(0, 8).toUpperCase();;
+  })
 
   document.getElementById('copy-text').addEventListener('click', copyText);
 
