@@ -2,7 +2,7 @@ import View from "./ttt-view"
 import Game from "../ttt_node/game"
 import { v4 as uuidv4 } from 'uuid';
 import database from "./firebase";
-import { collection, getDoc, doc, updateDoc, setDoc } from 'firebase/firestore';
+import { collection, getDoc, doc, updateDoc, setDoc, deleteDoc } from 'firebase/firestore';
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,8 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveGameToFirestore(gameCode, myId) {
     const gameRef = doc(database, 'games', gameCode);
     getDoc(gameRef).then((snapshot) => {
-        if (snapshot.exists()) {
-          // Game exists, and you have just found it, update it
+        if (snapshot.exists() && snapshot.data().player1 !== myId && !snapshot.data().active) {
+          // Game exists and it's not yours, (you have just found it), update it
           updateDoc(gameRef, {...snapshot.data(), player2: myId, active: true});
         } else {
           // If game doesn't exist, initialize one
@@ -48,7 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
+  function deleteOldGameFromDatabase(oldCode) {
+    const gameRef = doc(database, 'games', oldCode);
+    getDoc(gameRef).then((snapshot) => {
+      if (snapshot.exists() && !snapshot.data().active) {
+        deleteDoc(gameRef);
+      }
+    })
+  }
 
 
 
@@ -80,6 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.getElementById('code-generate').addEventListener('click', ()=> {
+    const oldGameCode = JSON.parse(sessionStorage.getItem("gameCode"));
+    deleteOldGameFromDatabase(oldGameCode)
     const gameCode = uuidv4().substr(0, 8).toUpperCase();
     document.getElementById('game-code').value = gameCode
     sessionStorage.setItem("gameCode", JSON.stringify(gameCode));
