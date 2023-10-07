@@ -2,7 +2,7 @@ import View from "./ttt-view"
 import Game from "../ttt_node/game"
 import { v4 as uuidv4 } from 'uuid';
 import database from "./firebase";
-import { collection, getDoc, doc, updateDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { collection, getDoc, doc, updateDoc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -33,20 +33,31 @@ document.addEventListener("DOMContentLoaded", () => {
   function saveGameToFirestore(gameCode, myId) {
     const gameRef = doc(database, 'games', gameCode);
     getDoc(gameRef).then((snapshot) => {
-        if (snapshot.exists() && snapshot.data().player1 !== myId && !snapshot.data().active) {
-          // Game exists and it's not yours, (you have just found it), update it
-          updateDoc(gameRef, {...snapshot.data(), player2: myId, active: true});
-        } else {
-          // If game doesn't exist, initialize one
+        if (!snapshot.exists()) {
           setDoc(gameRef, {
               active: false,
               player1: myId,
               player2: null,
               board: [null, null, null, null, null, null, null, null, null]
           });
+          listenForGameJoin(gameCode)
         }
     });
   }
+
+  function lookForGameInFirestore(gameCode, myId) {
+    const gameRef = doc(database, 'games', gameCode);
+    getDoc(gameRef).then((snapshot) => {
+        if (snapshot.exists() && snapshot.data().player1 !== myId && !snapshot.data().active) {
+          // Game exists and it's not yours, (you have just found it), update it
+          updateDoc(gameRef, {...snapshot.data(), player2: myId, active: true});
+          sessionStorage.setItem("gameActive", JSON.stringify(true));
+          sessionStorage.setItem("board", JSON.stringify(snapshot.data().board));
+          sessionStorage.setItem("opponent", JSON.stringify(snapshot.data().player1));
+        }
+    });
+  }
+
 
   function deleteOldGameFromDatabase(oldCode) {
     const gameRef = doc(database, 'games', oldCode);
@@ -55,6 +66,26 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteDoc(gameRef);
       }
     })
+  }
+
+  function listenForGameJoin(gameCode) {
+    const gameRef = doc(database, 'games', gameCode);
+  
+    // Listen for changes in the game document
+    const unsubscribe = onSnapshot(gameRef, (snapshot) => {
+      const gameData = snapshot.data();
+      if (gameData.active && gameData.player2) {
+        console.log('Player 2 has joined the game!');
+  
+        // Store the relevant game info in session storage for Player 1
+        sessionStorage.setItem("gameActive", JSON.stringify(true));
+        sessionStorage.setItem("board", JSON.stringify(gameData.board));
+        sessionStorage.setItem("opponent", JSON.stringify(gameData.player2));
+  
+        // You can stop listening after the game becomes active
+        unsubscribe();
+      }
+    });
   }
 
 
@@ -87,13 +118,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   document.getElementById('code-generate').addEventListener('click', ()=> {
+    debugger
     const oldGameCode = JSON.parse(sessionStorage.getItem("gameCode"));
-    deleteOldGameFromDatabase(oldGameCode)
+    if (oldGameCode.length !== 0){
+      deleteOldGameFromDatabase(oldGameCode)
+    }
     const gameCode = uuidv4().substr(0, 8).toUpperCase();
     document.getElementById('game-code').value = gameCode
     sessionStorage.setItem("gameCode", JSON.stringify(gameCode));
     saveGameToFirestore(gameCode, myId)
   })
+
+  document.getElementById('code-find').addEventListener('click', ()=> {
+    const oldGameCode = JSON.parse(sessionStorage.getItem("gameCode"));
+    deleteOldGameFromDatabase(oldGameCode)
+    const gameCode = document.getElementById('game-code').value;
+    sessionStorage.setItem("gameCode", JSON.stringify(gameCode));
+    lookForGameInFirestore(gameCode, myId)
+  })
+
 
   document.getElementById('start-button').addEventListener('click', ()=> {
     const startEle = document.querySelector('.start-a-game');
