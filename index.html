@@ -12,14 +12,28 @@
     <h1>Tic Tac Toe</h1>
 
     <div class="game-code-enter">
-      <form action="">
+
+      <button id="start-button">Start a Game</button>
+      <button id="join-button">Join a Game</button>
+
+      <div class="start-a-game hide">
         <div id="game-code-container">
-          <input id="game-code" type="text" placeholder="Enter a game code" value="">
+          <input id="game-code" type="text" placeholder="" value="" readonly>
           <img id="copy-text" src="assets/copy-text.svg" alt="">
           <div id="copy-message">Copied!</div>
         </div>
-      </form>
-      <button id="code-generate">Generate new code</button>
+        <button id="code-generate">Generate new code</button>
+      </div>
+
+      <div class="find-a-game hide">
+        <form action="">
+            <div class="input-field-div">
+              <input id="game-code" type="text" placeholder="Enter a game code" value="">
+            </div>
+            <button id="code-find">Search</button>
+        </form>
+      </div>
+
     </div>
 
     <figure class="ttt"></figure>

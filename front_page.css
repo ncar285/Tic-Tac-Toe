@@ -29,38 +29,50 @@ h1 {
     all: unset;
 }
 
+.start-a-game.hide, .find-a-game.hide {
+    display: none;
+}
+
+.start-a-game, .find-a-game {
+    background-color: rgba(0,0,0,0.1);
+    padding: 1rem;
+    border-radius: 0.4em;
+    margin: 0.5rem;
+    width: 12rem;
+}
+
 #game-code-container {
     position: relative;
     border-radius: 0.4em;
-    /* border: 1px solid orange; */
-    /* width: 100%; */
     display: flex;
     justify-content: space-between;
     align-items: center;
 
+    
+
+}
+
+.input-field-div {
+    padding: 0.5rem 1rem;
+    border-radius: 0.4em;
+    border: 1px solid #cccc;
+}
+
+.input-field-div:focus-within {
+    border: #1f1b1b 1px solid;
 }
 
 #game-code, #game-code:focus {
-    padding: 0.5rem 1rem;
     color: #1f1b1b;
     font-size: 1rem;
-    border-radius: 0.4em;
-    border: 1px solid #cccc;
-    width: 8rem;
-    /* width: 100%; */
 }
 
 #copy-text { 
     height: 1rem;
 }
 
-#game-code:focus {
-    border: #1f1b1b 1px solid;
-}
 
-
-
-#code-generate {
+button {
     all: unset;
     margin-top: 1rem;
     color: #1f1b1b;
@@ -68,14 +80,14 @@ h1 {
     padding: 0.5rem 1rem;
     font-size: 1rem;
     border-radius: 0.4em;
-    width: 10rem;
+    width: calc(100% - 2rem);
 }
 
-#code-generate:hover {
+button:hover {
     cursor: pointer;
 }
 
-#code-generate:active {
+button:active {
     background-color: rgba(0, 128,128);
     transform: scale(1.05);
 }
@@ -94,7 +106,8 @@ h1 {
     color: white;
     padding: 0.5rem;
     right: 0;
-    transform: translateX(calc(100% + 0.5rem));
+    transform: translateX(-1rem);
+    /* transform: translateX(calc(100% + 0.5rem)); */
     border-radius: 0.4em;
 }
 
