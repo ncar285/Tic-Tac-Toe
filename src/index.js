@@ -95,6 +95,39 @@ document.addEventListener("DOMContentLoaded", () => {
     saveGameToFirestore(gameCode, myId)
   })
 
+  document.getElementById('start-button').addEventListener('click', ()=> {
+    const startEle = document.querySelector('.start-a-game');
+    const startButton = document.getElementById('start-button')
+    startButton.classList.add('hide');
+    startEle.classList.remove('hide');
+  })
+
+  document.getElementById('join-button').addEventListener('click', ()=> {
+    const findEle = document.querySelector('.find-a-game');
+    const findButton = document.getElementById('join-button')
+    findButton.classList.add('hide');
+    findEle.classList.remove('hide');
+  })
+
+
+  const minimizeButtons = document.querySelectorAll('.minimize-button');
+  minimizeButtons.forEach(button => {
+      button.addEventListener('click', function() {
+          if (this.getAttribute('data-type') === 'start') {
+            const startEle = document.querySelector('.start-a-game');
+            const startButton = document.getElementById('start-button')
+            startEle.classList.add('hide');
+            startButton.classList.remove('hide');
+          } else if (this.getAttribute('data-type') === 'find') {
+            const findEle = document.querySelector('.find-a-game');
+            const findButton = document.getElementById('join-button')
+            findEle.classList.add('hide');
+            findButton.classList.remove('hide');
+          }
+      });
+  });
+
+
   document.getElementById('copy-text').addEventListener('click', copyText);
 
 

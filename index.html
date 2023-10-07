@@ -14,9 +14,10 @@
     <div class="game-code-enter">
 
       <button id="start-button">Start a Game</button>
-      <button id="join-button">Join a Game</button>
 
       <div class="start-a-game hide">
+        <h2>Start a Game</h2>
+        <img class="minimize-button" src="assets/minimize.svg" data-type="start" alt="">
         <div id="game-code-container">
           <input id="game-code" type="text" placeholder="" value="" readonly>
           <img id="copy-text" src="assets/copy-text.svg" alt="">
@@ -25,7 +26,11 @@
         <button id="code-generate">Generate new code</button>
       </div>
 
+      <button id="join-button">Join a Game</button>
+
       <div class="find-a-game hide">
+        <h2>Join a Game</h2>
+        <img class="minimize-button" src="assets/minimize.svg" data-type="find" alt="">
         <form action="">
             <div class="input-field-div">
               <input id="game-code" type="text" placeholder="Enter a game code" value="">
