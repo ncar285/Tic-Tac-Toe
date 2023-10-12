@@ -1,0 +1,51 @@
+/* global */
+
+html, body, figure, figcaption, ul, li, h1 {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    text-align: inherit;
+}
+
+body * {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* headers */
+
+h1 {
+    font-size: 3rem;
+    color: teal;
+    font-weight: 800;
+    padding: 4rem 0 2rem 0;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+/* Buttons */
+button {
+    all: unset;
+    margin-top: 1rem;
+    color: #1f1b1b;
+    background-color: rgba(0, 128,128, 0.5);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.4em;
+    width: calc(100% - 2rem);
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:active {
+    background-color: rgba(0, 128,128);
+    transform: scale(1.05);
+}
+
+button.hide {
+    display: none;
+}
