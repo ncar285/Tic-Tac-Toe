@@ -73,12 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
           board: [null, null, null, null, null, null, null, null, null]
         }
 
-        const activeGameRef = doc(database, 'activeGames', gameCode);
-        getDoc(activeGameRef).then((snapshot) => {
-            if (!snapshot.exists()) {
-              setDoc(activeGameRef, activeGame);
-            }
-        });
+        updateDoc(gameRef, {...activeGame});
 
         sessionStorage.setItem("activeGame", JSON.stringify(activeGame));
         
@@ -98,13 +93,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function listenForGameJoin(gameCode) {
-    const gameRef = doc(database, 'activeGames', gameCode);
+    const gameRef = doc(database, 'games', gameCode);
   
     // Listen for changes in the game document
     const unsubscribe = onSnapshot(gameRef, (snapshot) => {
       const gameData = snapshot.data();
       if (gameData.active && gameData.player2) {
-
 
         console.log('Player 2 has joined the game!');
   

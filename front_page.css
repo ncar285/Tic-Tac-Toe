@@ -25,9 +25,6 @@ h1 {
     transform: translateX(100%);
 }
 
-#game-code {
-    all: unset;
-}
 
 .start-a-game.hide, .find-a-game.hide {
     display: none;
@@ -64,6 +61,7 @@ h2 {
     align-items: center;
 }
 
+
 .input-field-div {
     padding: 0.5rem 1rem;
     border-radius: 0.4em;
@@ -74,7 +72,9 @@ h2 {
     border: #1f1b1b 1px solid;
 }
 
-#game-code, #game-code:focus {
+#game-code, #game-code:focus,
+#game-code-search, #game-code-search:focus {
+    all: unset;
     color: #1f1b1b;
     font-size: 1rem;
 }
