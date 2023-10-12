@@ -8,43 +8,59 @@ import { collection, getDoc, doc, updateDoc, setDoc, deleteDoc, onSnapshot } fro
 document.addEventListener("DOMContentLoaded", () => {
 
   
-  // when paqge is refreshed, should maintain the sessionStorage 
-  const gameCode = JSON.parse(sessionStorage.getItem("gameCode"));
-  if (gameCode) {
-      sessionStorage.setItem("gameCode", JSON.stringify(gameCode));
-      document.getElementById('game-code').value = gameCode;
-  } else {
-      sessionStorage.setItem("gameCode", JSON.stringify(''));
-      sessionStorage.setItem("gameActive", JSON.stringify(false));
+  // reset an active game session
+  const gameActive = JSON.parse(sessionStorage.getItem("gameActive"));
+  if (gameActive) {
+    sessionStorage.setItem("gameActive", JSON.stringify(JSON.parse(sessionStorage.getItem("gameActive"))));
+    sessionStorage.setItem("player", JSON.stringify(JSON.parse(sessionStorage.getItem("player"))));
+    sessionStorage.setItem("currentGame", JSON.stringify(JSON.parse(sessionStorage.getItem("currentGame"))));
+    sessionStorage.setItem("myId", JSON.stringify(JSON.parse(sessionStorage.getItem("myId"))));
   }
 
+  // reset pre-game session
 
   let myId = JSON.parse(sessionStorage.getItem("myId"));
-  if (myId) {
-    sessionStorage.setItem("myId", JSON.stringify(myId));
-  } else {
-    myId = uuidv4();
-    sessionStorage.setItem("myId", JSON.stringify(myId));
+  
+  if (!gameActive){
+    const gameCode = JSON.parse(sessionStorage.getItem("gameCode"));
+    if (gameCode) {
+        sessionStorage.setItem("gameCode", JSON.stringify(gameCode));
+        document.getElementById('game-code').value = gameCode;
+    } else {
+        sessionStorage.setItem("gameCode", JSON.stringify(''));
+        sessionStorage.setItem("gameActive", JSON.stringify(false));
+    }
+
+    if (myId ) {
+      sessionStorage.setItem("myId", JSON.stringify(myId));
+    } else {
+      myId = uuidv4();
+      sessionStorage.setItem("myId", JSON.stringify(myId));
+    }
+
+    if (myId && gameCode) {
+      saveGameToFirestore(gameCode, myId);
+    }
+
+    let joinGameCode = JSON.parse(sessionStorage.getItem("joinGameCode"));
+    if (joinGameCode) {
+        sessionStorage.setItem("joinGameCode", JSON.stringify(gameCode))
+        document.getElementById('game-code-search').value = joinGameCode;
+    } else {
+        sessionStorage.setItem("joinGameCode", JSON.stringify(''));
+    }
+  
+    if (myId && joinGameCode) {
+      lookForGameInFirestore(joinGameCode, myId)
+    }
+
   }
 
 
-  // wheen pafe refreshed save the game?
-  if (myId && gameCode) {
-    saveGameToFirestore(gameCode, myId);
-  }
+  
 
+  
 
-  const joinGameCode = JSON.parse(sessionStorage.getItem("joinGameCode"));
-  if (joinGameCode) {
-      sessionStorage.setItem("joinGameCode", JSON.stringify(gameCode))
-      document.getElementById('game-code-search').value = joinGameCode;
-  } else {
-      sessionStorage.setItem("joinGameCode", JSON.stringify(''));
-  }
-
-  if (myId && joinGameCode) {
-    lookForGameInFirestore(joinGameCode, myId)
-  }
 
 
 
@@ -62,26 +78,19 @@ document.addEventListener("DOMContentLoaded", () => {
   function lookForGameInFirestore(gameCode, myId) {
     const gameRef = doc(database, 'games', gameCode);
     getDoc(gameRef).then((snapshot) => {
-      
       if (snapshot.exists() && snapshot.data().player1 !== myId && !snapshot.data().active) {
         const gameData = snapshot.data()
-
         const activeGame = {
           active: true,
           player1: gameData.player1,
           player2: myId,
           board: [null, null, null, null, null, null, null, null, null]
         }
-
         updateDoc(gameRef, {...activeGame});
-
-        sessionStorage.setItem("activeGame", JSON.stringify(activeGame));
-        
+        startActiveGameSession(2)
       }
     });
   }
-
-
 
   function deleteOldGameFromDatabase(oldCode) {
     const gameRef = doc(database, 'games', oldCode);
@@ -94,20 +103,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function listenForGameJoin(gameCode) {
     const gameRef = doc(database, 'games', gameCode);
-  
-    // Listen for changes in the game document
     const unsubscribe = onSnapshot(gameRef, (snapshot) => {
       const gameData = snapshot.data();
       if (gameData.active && gameData.player2) {
-
-        console.log('Player 2 has joined the game!');
-  
-        sessionStorage.setItem("activeGame", JSON.stringify(gameData));
-  
-        // You can stop listening after the game becomes active
+        startActiveGameSession(1)
         unsubscribe();
       }
     });
+  }
+
+  function listenForMove(gameCode) {
+    const gameCode = JSON.stringify(JSON.parse(sessionStorage.getItem("currentGame")));
+    const gameRef = doc(database, 'games', gameCode);
+    
+    const unsubscribe = gameRef.onSnapshot((doc) => {
+        if (doc.exists) {
+            const gameData = doc.data();
+
+
+            
+            // Here, you can check the gameData for changes in the board or any other property
+            // For example, if you have a function called updateBoard to redraw the game, you can call:
+            updateBoard(gameData.board);
+
+            // If the game has ended or for any other reason you want to stop listening:
+            // unsubscribe();
+        } else {
+            console.log("No such document!");
+        }
+    });
+  }
+
+  function startActiveGameSession(playerNum) {
+    sessionStorage.setItem("player", JSON.stringify(playerNum));
+    sessionStorage.setItem("gameActive", JSON.stringify(true));
+    const gameCode = playerNum === 1 ? JSON.parse(sessionStorage.getItem("gameCode")) : document.getElementById('game-code-search').value;
+    sessionStorage.setItem("currentGame", gameCode );
+    sessionStorage.removeItem('gameCode')
+    sessionStorage.removeItem('joinGameCode')
   }
 
 
