@@ -133,17 +133,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function playMoveInFirestore(board) {
-    const gameCode = JSON.parse(sessionStorage.getItem("gameCode"));
-    const gameRef = doc(database, 'games', gameCode);
-    getDoc(gameRef).then((snapshot) => {
-      if (snapshot.exists()) {
-        const gameData = snapshot.data()
-        updateDoc(gameRef, {...gameData, board: board});
-      }
-    });
-  }
-
 
   function startActiveGameSession(playerNum) {
     sessionStorage.setItem("player", JSON.stringify(playerNum));
@@ -238,6 +227,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+  function playMoveInFirestore(board) {
+    debugger
+
+    // const gameCode = JSON.stringify(JSON.parse(sessionStorage.getItem("currentGame")))
+
+    const gameCode = sessionStorage.getItem("currentGame");
+    const gameRef = doc(database, 'games', gameCode);
+    getDoc(gameRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        const gameData = snapshot.data()
+        updateDoc(gameRef, {...gameData, board: board});
+      }
+    });
+  }
+
+
 
   const game = new Game();
   const ele = document.querySelector(".ttt")
@@ -249,27 +254,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const square = e.target;
     const pos = JSON.parse(square.dataset.pos);
 
-    // debugger
-
-    let player
     if (square.classList.length === 0) {
       square.innerHTML = game.currentPlayer
-      // console.log(game.currentPlayer)
       if (game.currentPlayer === "x") {
         square.classList.add("clickedX")
-        player = 'x'
       } else {
         square.classList.add("clickedO")
-        player = 'o'
       }
     }
     game.playMove(pos);
 
-    const flatIndex = 3*(pos[0]) + pos[1]
-    const board = game.board.reduce((acc, val) => acc.concat(val), []);
-    board[flatIndex]  = player;
-
-    playMoveInFirestore(board)
+    debugger
+    const newBoard = game.board.grid.reduce((acc,val)=> acc.concat(val),[])
+    playMoveInFirestore(newBoard)
 
     if (game.board.isOver()) {
       let winner = game.winner() ||"undefined";
